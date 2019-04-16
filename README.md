@@ -1,4 +1,4 @@
-# via Project
+# via project
     via is a middleware project.
 
 ## via-light-rpc
