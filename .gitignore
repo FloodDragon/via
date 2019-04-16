@@ -16,6 +16,7 @@ web/.gitignore
 bin/
 tmp/
 logs/
+via-logs/
 .bin/
 target/
 *.tmp
