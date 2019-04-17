@@ -8,6 +8,11 @@ import java.lang.reflect.Method;
 
 public class JavassistCompilerTest extends JavaCodeTest {
 
+    public static void main(String[] args) throws Exception {
+        JavassistCompilerTest javassistCompilerTest = new JavassistCompilerTest();
+        javassistCompilerTest.testCompileJavaClass0();
+    }
+
     @Test
     public void testCompileJavaClass() throws Exception {
         JavassistCompiler compiler = new JavassistCompiler();

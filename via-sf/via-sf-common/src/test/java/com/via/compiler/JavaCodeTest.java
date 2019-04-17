@@ -20,7 +20,7 @@ public class JavaCodeTest {
 
     String getSimpleCodeWithoutPackage(){
         StringBuilder code = new StringBuilder();
-        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + "implements org.apache.dubbo.common.compiler.support.HelloService.HelloService {");
+        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + "implements com.via.compiler.HelloService.HelloService {");
         code.append("   public String sayHello() { ");
         code.append("       return \"Hello world!\"; ");
         code.append("   }");
@@ -75,7 +75,7 @@ public class JavaCodeTest {
         code.append("import java.lang.*;\n");
         code.append("import com.via.compiler;\n");
 
-        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + " extends org.apache.dubbo.common.compiler.support.HelloServiceImpl0 {\n");
+        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + " extends com.via.compiler.HelloServiceImpl0 {\n");
         code.append("   public String sayHello() { ");
         code.append("       return \"Hello world3!\"; ");
         code.append("   }");
