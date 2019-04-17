@@ -1,4 +1,4 @@
-package com.via.rpc.event;
+package com.via.common.event;
 
 public interface Dispatcher {
 	

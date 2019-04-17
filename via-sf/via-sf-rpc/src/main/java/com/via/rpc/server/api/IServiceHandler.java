@@ -1,7 +1,7 @@
 package com.via.rpc.server.api;
 
-import com.via.rpc.event.Event;
-import com.via.rpc.event.EventHandler;
+import com.via.common.event.Event;
+import com.via.common.event.EventHandler;
 import com.via.rpc.server.event.RequestEvent;
 import com.via.rpc.server.event.ResponseEvent;
 import com.via.rpc.server.event.enums.ServiceEnum;

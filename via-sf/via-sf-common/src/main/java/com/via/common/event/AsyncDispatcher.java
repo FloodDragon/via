@@ -1,6 +1,6 @@
-package com.via.rpc.event;
+package com.via.common.event;
 
-import com.via.rpc.service.AbstractService;
+import com.via.common.service.AbstractService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

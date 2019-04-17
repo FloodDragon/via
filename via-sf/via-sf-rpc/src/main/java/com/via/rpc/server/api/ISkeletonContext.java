@@ -1,6 +1,6 @@
 package com.via.rpc.server.api;
 
-import com.via.rpc.event.Dispatcher;
+import com.via.common.event.Dispatcher;
 import com.via.rpc.remoting.Channel;
 
 /**

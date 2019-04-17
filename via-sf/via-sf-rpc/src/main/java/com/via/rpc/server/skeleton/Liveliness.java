@@ -1,7 +1,7 @@
 package com.via.rpc.server.skeleton;
 
-import com.via.rpc.event.Dispatcher;
-import com.via.rpc.event.EventHandler;
+import com.via.common.event.Dispatcher;
+import com.via.common.event.EventHandler;
 import com.via.rpc.exc.RpcException;
 import com.via.rpc.remoting.Channel;
 import com.via.rpc.server.event.ChannelInboundEvent;

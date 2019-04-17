@@ -1,4 +1,4 @@
-package com.via.rpc.service;
+package com.via.common.service;
 
 import java.io.IOException;
 import java.util.ArrayList;

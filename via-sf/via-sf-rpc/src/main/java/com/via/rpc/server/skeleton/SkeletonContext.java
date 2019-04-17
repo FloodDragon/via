@@ -1,7 +1,7 @@
 package com.via.rpc.server.skeleton;
 
-import com.via.rpc.event.AsyncDispatcher;
-import com.via.rpc.event.Dispatcher;
+import com.via.common.event.AsyncDispatcher;
+import com.via.common.event.Dispatcher;
 import com.via.rpc.remoting.Channel;
 import com.via.rpc.server.api.IFunction;
 import com.via.rpc.server.api.ILiveliness;
@@ -14,8 +14,8 @@ import com.via.rpc.server.event.enums.HeartbeatEnum;
 import com.via.rpc.server.event.enums.ServiceEnum;
 import com.via.rpc.server.skeleton.service.Observer;
 import com.via.rpc.server.skeleton.service.ServiceHandler;
-import com.via.rpc.service.AbstractService;
-import com.via.rpc.service.LifeService;
+import com.via.common.service.AbstractService;
+import com.via.common.service.LifeService;
 import com.via.rpc.conf.Config;
 
 import java.lang.ref.WeakReference;

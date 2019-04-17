@@ -1,7 +1,7 @@
 package com.via.rpc.server.skeleton;
 
 import com.via.rpc.server.api.ILiveliness;
-import com.via.rpc.service.AbstractService;
+import com.via.common.service.AbstractService;
 import com.via.rpc.utils.Clock;
 import com.via.rpc.utils.Daemon;
 import com.via.rpc.utils.MonotonicClock;

@@ -3,7 +3,7 @@ package com.via.rpc.client;
 import com.via.rpc.exc.RpcException;
 import com.via.rpc.protocol.Heartbeat;
 import com.via.rpc.protocol.Packet;
-import com.via.rpc.service.AbstractService;
+import com.via.common.service.AbstractService;
 import com.via.rpc.utils.Constants;
 import com.via.rpc.utils.Daemon;
 

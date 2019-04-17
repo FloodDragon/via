@@ -1,13 +1,12 @@
 package com.via.rpc.client;
 
 import com.via.rpc.conf.Config;
-
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
+import com.via.common.bytecode.Proxy;
 
 /**
  * RPC客户端代理
- *
+ * <p>
  * Created by LiuJing on 16-8-4.
  */
 public class ClientProxy extends AbstractClient {
@@ -33,6 +32,6 @@ public class ClientProxy extends AbstractClient {
 
     public <T> T create(Class<T> api, ClassLoader classLoader) {
         InvocationHandler invocationHandler = new RemoteProxy(this, api);
-        return (T) Proxy.newProxyInstance(classLoader, new Class[] {api}, invocationHandler);
+        return (T) Proxy.getProxy(classLoader, new Class[]{api}).newInstance(invocationHandler);
     }
 }

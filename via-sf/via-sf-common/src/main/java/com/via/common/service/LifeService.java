@@ -1,4 +1,4 @@
-package com.via.rpc.service;
+package com.via.common.service;
 
 import java.io.Closeable;
 import java.io.IOException;

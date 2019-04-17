@@ -1,5 +1,5 @@
 
-package com.via.rpc.service;
+package com.via.common.service;
 
 /**
  * Created by LiuJing on 16-8-9.

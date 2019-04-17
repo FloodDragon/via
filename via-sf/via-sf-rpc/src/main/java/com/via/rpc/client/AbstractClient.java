@@ -10,7 +10,7 @@ import com.via.rpc.remoting.Channel;
 import com.via.rpc.remoting.ChannelHandler;
 import com.via.rpc.remoting.Client;
 import com.via.rpc.remoting.RpcChannel;
-import com.via.rpc.service.AbstractService;
+import com.via.common.service.AbstractService;
 import com.via.rpc.conf.Config;
 import com.via.rpc.utils.NetUtils;
 import io.netty.bootstrap.Bootstrap;

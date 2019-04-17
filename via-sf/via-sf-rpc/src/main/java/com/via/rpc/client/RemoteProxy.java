@@ -6,7 +6,7 @@ import com.via.rpc.exc.NotAllowedException;
 import com.via.rpc.exc.RpcException;
 import com.via.rpc.exc.ServiceNotFoundException;
 import com.via.rpc.protocol.Packet;
-import com.via.rpc.service.LifeService;
+import com.via.common.service.LifeService;
 import com.via.rpc.utils.Constants;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

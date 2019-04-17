@@ -1,6 +1,6 @@
 package com.via.rpc.server.skeleton.service;
 
-import com.via.rpc.event.Event;
+import com.via.common.event.Event;
 import com.via.rpc.exc.RpcException;
 import com.via.rpc.remoting.Channel;
 import com.via.rpc.server.api.IServiceHandler;
@@ -9,7 +9,7 @@ import com.via.rpc.server.api.ISkeletonContext;
 import com.via.rpc.server.event.RequestEvent;
 import com.via.rpc.server.event.ResponseEvent;
 import com.via.rpc.server.event.enums.ServiceEnum;
-import com.via.rpc.service.AbstractService;
+import com.via.common.service.AbstractService;
 import com.via.rpc.conf.Config;
 import com.via.rpc.utils.Constants;
 import com.via.rpc.utils.Daemon;

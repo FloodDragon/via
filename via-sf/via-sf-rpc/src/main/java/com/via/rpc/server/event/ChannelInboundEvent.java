@@ -1,6 +1,6 @@
 package com.via.rpc.server.event;
 
-import com.via.rpc.event.Event;
+import com.via.common.event.Event;
 import com.via.rpc.remoting.Channel;
 import com.via.rpc.server.event.enums.ChannelInboundEnum;
 import com.via.rpc.utils.Time;

@@ -1,5 +1,5 @@
 
-package com.via.rpc.event;
+package com.via.common.event;
 
 
 public abstract class AbstractEvent<TYPE extends Enum<TYPE>> 
