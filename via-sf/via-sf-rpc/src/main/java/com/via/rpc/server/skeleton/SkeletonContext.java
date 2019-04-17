@@ -12,6 +12,7 @@ import com.via.rpc.server.api.IServiceHandler;
 import com.via.rpc.server.api.ISkeletonContext;
 import com.via.rpc.server.event.enums.HeartbeatEnum;
 import com.via.rpc.server.event.enums.ServiceEnum;
+import com.via.rpc.server.skeleton.liveliness.Liveliness;
 import com.via.rpc.server.skeleton.service.Observer;
 import com.via.rpc.server.skeleton.service.ServiceHandler;
 import com.via.common.service.AbstractService;

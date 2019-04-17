@@ -1,4 +1,4 @@
-package com.via.rpc.server.skeleton;
+package com.via.rpc.server.skeleton.liveliness;
 
 import com.via.common.event.Dispatcher;
 import com.via.common.event.EventHandler;

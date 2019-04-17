@@ -1,4 +1,4 @@
-package com.via.rpc.server.skeleton;
+package com.via.rpc.server.skeleton.liveliness;
 
 import com.via.rpc.server.api.ILiveliness;
 import com.via.common.service.AbstractService;
