@@ -1,6 +1,7 @@
 package com.via.example;
 
 import com.via.rpc.client.ClientProxy;
+import com.via.rpc.client.HeartbeatPostMan;
 import com.via.rpc.conf.Config;
 
 /**
@@ -15,13 +16,12 @@ public class ClientTest {
         });
         final ClientProxy clientProxy = new ClientProxy(config);
         clientProxy.start();
-        /** 测试心跳邮递机制
-         HeartbeatPostMan heartbeatPostMan = clientProxy.getHeartbeatPostMan();
-         for (int i = 0; i < 10; i++) {
-         Thread.sleep(4000);
-         heartbeatPostMan.deliver("hello:" + i);
-         }
-         */
+        //测试心跳邮递机制
+        HeartbeatPostMan heartbeatPostMan = clientProxy.getHeartbeatPostMan();
+        for (int i = 0; i < 10; i++) {
+            Thread.sleep(500);
+            heartbeatPostMan.deliver("hello:" + i);
+        }
         TestService testService = clientProxy.create(TestService.class);
         for (int i = 0; i < 100000; i++) {
             try {
