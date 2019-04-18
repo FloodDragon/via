@@ -8,6 +8,7 @@ import com.via.rpc.server.api.ISkeletonContext;
 import com.via.rpc.utils.Constants;
 import com.via.rpc.utils.ConversionUtils;
 import com.via.rpc.utils.InvokeUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -24,14 +25,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author LiuJing
  * @version 2013.12.21 首版
- * @version 2019.1.22  MethodWrapper 支持javassist 代理service提高效率(需要改进)
  */
 public final class ServiceInvoker implements IServiceInvoker {
 
     private static Logger LOG = LoggerFactory.getLogger(ServiceInvoker.class);
 
-    private static class MethodWrapper {
-        private final Map<String, Method> paramTypeClassNameMethodMap = new ConcurrentHashMap<>();
+    private static class MethodWrapper extends ConcurrentHashMap<String, Method> {
         private static final String SEPARATOR = ":";
         private static final Map<String, MethodWrapper> MethodWrapperCache = new ConcurrentHashMap<>();
 
@@ -47,11 +46,11 @@ public final class ServiceInvoker implements IServiceInvoker {
                 methodWrapper.addMethod(classes, method);
         }
 
-        static String wrapperKey(String interfaceName, String methodName) {
+        private static String wrapperKey(String interfaceName, String methodName) {
             return new StringBuilder().append(interfaceName).append(SEPARATOR).append(methodName).toString();
         }
 
-        static String methodKey(Class<?>... classes) {
+        private static String methodKey(Class<?>... classes) {
             if (classes == null || classes.length == 0)
                 return void.class.getSimpleName();
             else {
@@ -66,19 +65,19 @@ public final class ServiceInvoker implements IServiceInvoker {
         }
 
         public MethodWrapper addMethod(Class<?>[] classes, Method method) {
-            paramTypeClassNameMethodMap.put(methodKey(classes), method);
+            this.put(methodKey(classes), method);
             return this;
         }
 
         public Method findMethod(Object[] args) {
-            if (paramTypeClassNameMethodMap.size() == 0)
+            if (this.size() == 0)
                 return null;
             else {
                 Class<?>[] classes = new Class[args.length];
                 for (int i = 0; i < args.length; i++) {
                     classes[i] = args[0].getClass();
                 }
-                return paramTypeClassNameMethodMap.get(methodKey(classes));
+                return this.get(methodKey(classes));
             }
         }
     }
