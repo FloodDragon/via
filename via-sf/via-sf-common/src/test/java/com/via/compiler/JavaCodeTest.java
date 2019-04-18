@@ -20,7 +20,7 @@ public class JavaCodeTest {
 
     String getSimpleCodeWithoutPackage(){
         StringBuilder code = new StringBuilder();
-        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + "implements com.via.compiler.HelloService.HelloService {");
+        code.append("public class HelloServiceImpl" + SUBFIX.getAndIncrement() + " implements com.via.compiler.HelloService.HelloService {");
         code.append("   public String sayHello() { ");
         code.append("       return \"Hello world!\"; ");
         code.append("   }");

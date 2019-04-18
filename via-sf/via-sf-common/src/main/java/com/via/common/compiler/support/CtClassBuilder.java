@@ -124,11 +124,6 @@ public class CtClassBuilder {
             ctClass.addInterface(pool.get(iface));
         }
 
-        // add constructors
-        for (String constructor : constructors) {
-            ctClass.addConstructor(CtNewConstructor.make(constructor, ctClass));
-        }
-
         // add fields
         for (String field : fields) {
             ctClass.addField(CtField.make(field, ctClass));
@@ -139,7 +134,10 @@ public class CtClassBuilder {
             ctClass.addMethod(CtNewMethod.make(method, ctClass));
         }
 
+        // add constructors
+        for (String constructor : constructors) {
+            ctClass.addConstructor(CtNewConstructor.make(constructor, ctClass));
+        }
         return ctClass;
     }
-
 }

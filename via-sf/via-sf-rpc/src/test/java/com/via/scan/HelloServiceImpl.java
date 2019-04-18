@@ -1,9 +1,8 @@
 package com.via.scan;
 
 import com.via.common.compiler.support.JavassistCompiler;
-
+import com.via.rpc.server.api.IService;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class HelloServiceImpl implements HelloService {
     @Override
@@ -27,10 +26,10 @@ public class HelloServiceImpl implements HelloService {
         code.append("import com.via.rpc.server.api.ISkeletonContext;\n");
         code.append("import com.via.rpc.server.api.INotification;\n");
         code.append("import com.via.rpc.server.skeleton.service.Notification;\n");
-        code.append("public class " + cls.getSimpleName() + "_0 extends " + cls.getSimpleName() + " implements IService { \n");
-        code.append("protected String serviceName;\n");
-        code.append("protected ISkeletonContext actionContext;\n");
-        code.append("public " + cls.getSimpleName() + "_0(){\n");
+        code.append("public class " + cls.getSimpleName() + "0 extends " + cls.getSimpleName() + " implements IService {\n");
+        code.append("protected String serviceName=null;\n");
+        code.append("protected ISkeletonContext actionContext=null;\n");
+        code.append("public " + cls.getSimpleName() + "0(){\n");
         code.append("this.serviceName=\"" + interfaceCls.getSimpleName() + "\";\n");
         code.append("}\n");
 
@@ -90,7 +89,9 @@ public class HelloServiceImpl implements HelloService {
         JavassistCompiler compiler = new JavassistCompiler();
         Class<?> clazz = compiler.compile(code, JavassistCompiler.class.getClassLoader());
         Object instance = clazz.newInstance();
-        Method sayHello = instance.getClass().getMethod("sayHello");
-        System.out.println(sayHello.invoke(instance));
+        HelloService helloService = (HelloService) instance;
+        System.out.println(helloService.sayHello());
+        IService iService = (IService) instance;
+        System.out.println(iService.getServiceName());
     }
 }
