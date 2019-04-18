@@ -42,7 +42,7 @@ public abstract class Service implements IService {
     public INotification sendNotification(String notificationName, Object body,
                                           String type) {
         INotification notification = new Notification(notificationName, body,
-            type);
+                type);
         actionContext.notifyObservers(notification);
         return notification;
     }
@@ -57,6 +57,7 @@ public abstract class Service implements IService {
         return sendNotification(notificationName, null, null);
     }
 
+    @Override
     public void setServiceContext(ISkeletonContext actionContext) {
         this.actionContext = actionContext;
     }

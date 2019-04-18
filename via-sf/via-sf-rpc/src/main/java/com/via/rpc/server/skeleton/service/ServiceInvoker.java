@@ -12,8 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.management.ServiceNotFoundException;
 
 import org.slf4j.Logger;
@@ -31,30 +31,59 @@ public final class ServiceInvoker implements IServiceInvoker {
     private static Logger LOG = LoggerFactory.getLogger(ServiceInvoker.class);
 
     private static class MethodWrapper {
-        private String methodName;
-        private Class<?>[] classes;
-        private Method method;
+        private final Map<String, Method> paramTypeClassNameMethodMap = new ConcurrentHashMap<>();
+        private static final String SEPARATOR = ":";
+        private static final Map<String, MethodWrapper> MethodWrapperCache = new ConcurrentHashMap<>();
 
-        public MethodWrapper(String methodName, Class<?>[] classes, Method method) {
-            this.methodName = methodName;
-            this.classes = classes;
-            this.method = method;
+        public static MethodWrapper getMethodWrapper(String interfaceName, String methodName) {
+            return MethodWrapperCache.get(wrapperKey(interfaceName, methodName));
         }
 
-        public Method findMethod(String methodName, Object[] args) {
-            if (this.methodName.equals(methodName)
-                && args.length == classes.length) {
-                for (int i = 0; i < args.length; i++)
-                    if (!args[i].getClass().isAssignableFrom(classes[i]))
-                        return null;
-                return method;
+        public static void addMethodWrapper(String interfaceName, String methodName, Class<?>[] classes, Method method) {
+            MethodWrapper methodWrapper = MethodWrapperCache.get(wrapperKey(interfaceName, methodName));
+            if (methodWrapper == null)
+                MethodWrapperCache.put(wrapperKey(interfaceName, methodName), new MethodWrapper().addMethod(classes, method));
+            else
+                methodWrapper.addMethod(classes, method);
+        }
+
+        static String wrapperKey(String interfaceName, String methodName) {
+            return new StringBuilder().append(interfaceName).append(SEPARATOR).append(methodName).toString();
+        }
+
+        static String methodKey(Class<?>... classes) {
+            if (classes == null || classes.length == 0)
+                return void.class.getSimpleName();
+            else {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < classes.length; i++) {
+                    builder.append(classes[i].getSimpleName());
+                    if (i < classes.length - 1)
+                        builder.append(SEPARATOR);
+                }
+                return builder.toString();
             }
-            return null;
+        }
+
+        public MethodWrapper addMethod(Class<?>[] classes, Method method) {
+            paramTypeClassNameMethodMap.put(methodKey(classes), method);
+            return this;
+        }
+
+        public Method findMethod(Object[] args) {
+            if (paramTypeClassNameMethodMap.size() == 0)
+                return null;
+            else {
+                Class<?>[] classes = new Class[args.length];
+                for (int i = 0; i < args.length; i++) {
+                    classes[i] = args[0].getClass();
+                }
+                return paramTypeClassNameMethodMap.get(methodKey(classes));
+            }
         }
     }
 
     private ISkeletonContext skeletonContext;
-    private Set<MethodWrapper> methodCaches = new CopyOnWriteArraySet<MethodWrapper>();
 
     public ServiceInvoker(ISkeletonContext skeletonContext) {
         this.skeletonContext = skeletonContext;
@@ -92,6 +121,7 @@ public final class ServiceInvoker implements IServiceInvoker {
             LOG.warn("skeleton not found: {}", interfaceName);
             return false;
         } else {
+            String interfaceName = call.getInterfaceName();
             String methodName = call.getMethodName();
             if (methodName.charAt(0) == '@') {
                 methodName = methodName.substring(1);
@@ -99,57 +129,55 @@ public final class ServiceInvoker implements IServiceInvoker {
             Object[] args = call.getArguments();
             Object[] argsWithCall;
             if (args != null) {
-                argsWithCall = new Object[args.length + 1];
-                argsWithCall[0] = call;
+                argsWithCall = new Object[args.length];
+                //argsWithCall[0] = call;
                 for (int i = 0; i < args.length; i++) {
-                    argsWithCall[i + 1] = args[i];
+                    argsWithCall[i] = args[i];
                 }
             } else {
-                argsWithCall = new Object[] {call};
+                argsWithCall = new Object[0];
             }
             Object[] methodResult = null;
-            if (methodCaches.size() > 0) {
-                Method method = null;
-                for (MethodWrapper cache : methodCaches) {
-                    if (cache.findMethod(methodName, argsWithCall) != null) {
-                        method = cache.findMethod(methodName, argsWithCall);
-                        break;
-                    }
-                }
+            boolean needCache = false;
+            MethodWrapper methodWrapper = MethodWrapper.getMethodWrapper(interfaceName, methodName);
+            if (methodWrapper != null) {
+                Method method = methodWrapper.findMethod(argsWithCall);
                 if (method != null) {
-                    methodResult = new Object[] {method, argsWithCall};
+                    methodResult = new Object[]{method, argsWithCall};
+                    needCache = false;
                 }
             }
             if (methodResult == null) {
+                needCache = true;
                 methodResult = InvokeUtils.findMethodWithExactParameters(
-                    service, methodName, argsWithCall);
+                        service, methodName, argsWithCall);
                 if (methodResult.length == 0 || methodResult[0] == null) {
                     methodResult = InvokeUtils.findMethodWithExactParameters(
-                        service, methodName, args);
+                            service, methodName, args);
                     if (methodResult.length == 0 || methodResult[0] == null) {
                         methodResult = InvokeUtils
-                            .findMethodWithListParameters(service,
-                                methodName, argsWithCall);
+                                .findMethodWithListParameters(service,
+                                        methodName, argsWithCall);
                         if (methodResult.length == 0 || methodResult[0] == null) {
                             methodResult = InvokeUtils
-                                .findMethodWithListParameters(service,
-                                    methodName, args);
+                                    .findMethodWithListParameters(service,
+                                            methodName, args);
                             if (methodResult.length == 0
-                                || methodResult[0] == null) {
+                                    || methodResult[0] == null) {
                                 LOG.error(
-                                    "没有找到匹配参数的Method",
-                                    new Object[] {
-                                        methodName,
-                                        (args == null ? Collections.EMPTY_LIST
-                                            : Arrays.asList(args)),
-                                        service});
+                                        "没有找到匹配参数的Method",
+                                        new Object[]{
+                                                methodName,
+                                                (args == null ? Collections.EMPTY_LIST
+                                                        : Arrays.asList(args)),
+                                                service});
                                 call.setStatus(Constants.STATUS_METHOD_NOT_FOUND);
                                 if (args != null && args.length > 0) {
                                     call.setException(new MethodNotFoundException(
-                                        methodName, args));
+                                            methodName, args));
                                 } else {
                                     call.setException(new MethodNotFoundException(
-                                        methodName));
+                                            methodName));
                                 }
                                 return false;
                             }
@@ -174,14 +202,15 @@ public final class ServiceInvoker implements IServiceInvoker {
                     call.setStatus(Constants.STATUS_SUCCESS_VOID);
                 } else {
                     result = method.invoke(service, params);
-                   // LOG.debug("result: {}", result);
+                    // LOG.debug("result: {}", result);
                     call.setStatus(result == null ? Constants.STATUS_SUCCESS_NULL
-                        : Constants.STATUS_SUCCESS_RESULT);
+                            : Constants.STATUS_SUCCESS_RESULT);
                 }
                 call.setResult(result);
-                methodCaches.add(new MethodWrapper(methodName, ConversionUtils
-                    .convertParams(params), method));
-
+                if (needCache) {
+                    MethodWrapper.addMethodWrapper(interfaceName, methodName, ConversionUtils
+                            .convertParams(params), method);
+                }
             } catch (NotAllowedException e) {
                 call.setException(e);
                 call.setStatus(Constants.STATUS_ACCESS_DENIED);

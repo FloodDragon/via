@@ -14,7 +14,6 @@ public class TestServiceImpl extends Service implements TestService {
 
     @Override
     public void handleNotification(INotification notification) {
-
     }
 
     @Override
