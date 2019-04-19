@@ -84,6 +84,7 @@ public class HelloServiceImpl implements HelloService {
         return code.toString();
     }
 
+    /*
     public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         String code = testOnlineCompilerCode(new HelloServiceImpl());
         JavassistCompiler compiler = new JavassistCompiler();
@@ -94,4 +95,5 @@ public class HelloServiceImpl implements HelloService {
         IService iService = (IService) instance;
         System.out.println(iService.getServiceName());
     }
+    */
 }
