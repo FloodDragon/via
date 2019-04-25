@@ -16,5 +16,7 @@
         <module>via-sf-rpc</module>
         <module>via-sf-common</module>
         <module>via-sf-serialization</module>
+        <module>via-sf-client</module>
+        <module>via-sf-server</module>
     </modules>
 </project>
