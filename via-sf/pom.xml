@@ -18,5 +18,6 @@
         <module>via-sf-serialization</module>
         <module>via-sf-client</module>
         <module>via-sf-server</module>
+        <module>via-sf-registry</module>
     </modules>
 </project>
