@@ -14,6 +14,8 @@ public class HelloServiceImpl implements HelloService {
 
     public static void main(String[] args) throws Exception {
         IService iService = ServiceProxyFactory.createServiceProxyInstance(new HelloServiceImpl());
+        HelloService helloService = (HelloService) iService;
+        System.out.println(helloService.sayHello());
         System.out.println(iService.getServiceName());
     }
 }
