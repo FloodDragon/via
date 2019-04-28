@@ -6,6 +6,8 @@ import com.via.rpc.server.api.ISkeletonContext;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * 服务基类(可相互广播)
  *
@@ -13,6 +15,7 @@ import org.slf4j.helpers.MessageFormatter;
  */
 public abstract class Service implements IService {
 
+    protected static final AtomicLong proxySequence = new AtomicLong(-1);
     protected String serviceName = "serviceName";
     protected ISkeletonContext actionContext;
 
@@ -64,7 +67,7 @@ public abstract class Service implements IService {
         this.actionContext = actionContext;
     }
 
-    public final static class ServiceCodeTemplate {
+    public final static class ServiceProxyCodeTemplate {
 
         public final static String CODE_TEMPLATE;
 
@@ -135,21 +138,31 @@ public abstract class Service implements IService {
             CODE_TEMPLATE = code.toString();
         }
 
-        public final static String buildCodeTemplate(String serviceClassPackage,
-                                                     String serviceClassFullName,
-                                                     String serviceProxyName,
-                                                     String serviceClassName,
-                                                     String serviceInterfaceClassName) {
+        public final static String getServiceProxyCode(String serviceClassPackage,
+                                                       String serviceClassFullName,
+                                                       String serviceProxyName,
+                                                       String serviceClassName,
+                                                       String serviceInterfaceClassFullName) {
             Object[] argArray = {
                     serviceClassPackage,
                     serviceClassFullName,
                     serviceProxyName,
                     serviceClassName,
                     serviceProxyName,
-                    serviceInterfaceClassName
+                    serviceInterfaceClassFullName
             };
             FormattingTuple ft = MessageFormatter.arrayFormat(CODE_TEMPLATE, argArray);
             return ft.getMessage();
+        }
+
+        public final static String getServiceProxyCode(Object serviceInstance, Class<?> serviceInterfaceClass) {
+            Class<?> serviceInstanceClass = serviceInstance.getClass();
+            String serviceInstancePackage = serviceInstanceClass.getPackage().getName();
+            String serviceClassFullName = serviceInstanceClass.getName();
+            String serviceClassName = serviceInstanceClass.getSimpleName();
+            String serviceProxyName = new StringBuilder(serviceClassName).append("Proxy").append(proxySequence.incrementAndGet()).toString();
+            String serviceInterfaceClassFullName = serviceInterfaceClass.getName();
+            return getServiceProxyCode(serviceInstancePackage, serviceClassFullName, serviceProxyName, serviceClassName, serviceInterfaceClassFullName);
         }
     }
 }
