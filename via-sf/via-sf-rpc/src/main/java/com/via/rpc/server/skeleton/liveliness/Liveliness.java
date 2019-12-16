@@ -14,6 +14,7 @@ import com.via.rpc.server.listener.ClientRegisterListener;
 import com.via.rpc.server.listener.ClientUnregisterListener;
 import com.via.rpc.conf.Config;
 import com.via.rpc.utils.Constants;
+import com.via.rpc.utils.ThreadPoolUtils;
 import com.via.rpc.utils.Time;
 
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class Liveliness extends AbstractLivelinessMonitor<Channel> implements Ev
     private ClientUnregisterListener clientUnregisterListener;//客户端注销心跳监听
     private ClientLiveExpiredListener clientLiveExpiredListener;//心跳租约超期监听
     private ClientHeartbeatBodyListener clientHeartbeatBodyListener;//心跳携带的body监控
-    private ExecutorService executor = Executors.newFixedThreadPool(5);
+    private ExecutorService executor = ThreadPoolUtils.newFixedThreadPool(5);
     private Map<String, Channel> heartbeatChannelMap = new ConcurrentHashMap<>();//clientId:Channel
 
     public Liveliness(Config config, Dispatcher dispatcher) {
@@ -61,6 +62,12 @@ public class Liveliness extends AbstractLivelinessMonitor<Channel> implements Ev
     protected void serviceInit() throws Exception {
         setExpireInterval(expireIntvl);
         setMonitorInterval(expireIntvl / 3);
+    }
+
+    @Override
+    protected void serviceStop() throws Exception {
+        super.serviceStop();
+        executor.shutdownNow();
     }
 
     @Override

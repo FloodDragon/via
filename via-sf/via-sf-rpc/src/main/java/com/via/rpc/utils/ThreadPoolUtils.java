@@ -8,14 +8,15 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * @author LiuJing
+ */
 public class ThreadPoolUtils {
 
     /**
      * 固定大小线程池，无队列
      *
-     * @param corePoolSize
-     *         初始化线程池
+     * @param corePoolSize 初始化线程池
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize) {
@@ -23,16 +24,15 @@ public class ThreadPoolUtils {
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
-                new SynchronousQueue<Runnable>());
+                new SynchronousQueue<Runnable>(),
+                new Daemon.DaemonFactory());
     }
 
     /**
      * 固定大小线程池，自定义队列
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param queue
-     *         线程池队列
+     * @param corePoolSize 初始化线程池
+     * @param queue        线程池队列
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
@@ -41,18 +41,16 @@ public class ThreadPoolUtils {
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
-                queue);
+                queue,
+                new Daemon.DaemonFactory());
     }
 
     /**
      * 固定大小线程池，自定义队列和线程池工厂
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param queue
-     *         线程池队列
-     * @param threadFactory
-     *         线程池工厂
+     * @param corePoolSize  初始化线程池
+     * @param queue         线程池队列
+     * @param threadFactory 线程池工厂
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
@@ -69,14 +67,10 @@ public class ThreadPoolUtils {
     /**
      * 固定大小线程池，自定义队列、线程池工厂和拒绝策略
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param queue
-     *         线程池队列
-     * @param threadFactory
-     *         线程池工厂
-     * @param handler
-     *         拒绝策略
+     * @param corePoolSize  初始化线程池
+     * @param queue         线程池队列
+     * @param threadFactory 线程池工厂
+     * @param handler       拒绝策略
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
@@ -96,10 +90,8 @@ public class ThreadPoolUtils {
     /**
      * 缓冲线程池（1分钟无调用销毁），无队列
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param maximumPoolSize
-     *         最大线程池
+     * @param corePoolSize    初始化线程池
+     * @param maximumPoolSize 最大线程池
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
@@ -114,12 +106,9 @@ public class ThreadPoolUtils {
     /**
      * 缓冲线程池（1分钟无调用销毁），自定义队列
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param maximumPoolSize
-     *         最大线程池
-     * @param queue
-     *         线程池队列
+     * @param corePoolSize    初始化线程池
+     * @param maximumPoolSize 最大线程池
+     * @param queue           线程池队列
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
@@ -135,14 +124,10 @@ public class ThreadPoolUtils {
     /**
      * 缓冲线程池（1分钟无调用销毁），自定义队列和线程池工厂
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param maximumPoolSize
-     *         最大线程池
-     * @param queue
-     *         线程池队列
-     * @param threadFactory
-     *         线程池工厂
+     * @param corePoolSize    初始化线程池
+     * @param maximumPoolSize 最大线程池
+     * @param queue           线程池队列
+     * @param threadFactory   线程池工厂
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
@@ -160,16 +145,11 @@ public class ThreadPoolUtils {
     /**
      * 缓冲线程池（1分钟无调用销毁），自定义队列、线程池工厂和拒绝策略
      *
-     * @param corePoolSize
-     *         初始化线程池
-     * @param maximumPoolSize
-     *         最大线程池
-     * @param queue
-     *         线程池队列
-     * @param threadFactory
-     *         线程池工厂
-     * @param handler
-     *         拒绝策略
+     * @param corePoolSize    初始化线程池
+     * @param maximumPoolSize 最大线程池
+     * @param queue           线程池队列
+     * @param threadFactory   线程池工厂
+     * @param handler         拒绝策略
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
@@ -189,8 +169,7 @@ public class ThreadPoolUtils {
     /**
      * 构建队列
      *
-     * @param size
-     *         队列大小
+     * @param size 队列大小
      * @return 队列
      */
     public static BlockingQueue<Runnable> buildQueue(int size) {
@@ -200,10 +179,8 @@ public class ThreadPoolUtils {
     /**
      * 构建队列
      *
-     * @param size
-     *         队列大小
-     * @param isPriority
-     *         是否优先级队列
+     * @param size       队列大小
+     * @param isPriority 是否优先级队列
      * @return 队列
      */
     public static BlockingQueue<Runnable> buildQueue(int size, boolean isPriority) {

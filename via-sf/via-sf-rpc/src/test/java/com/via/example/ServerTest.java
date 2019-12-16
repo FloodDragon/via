@@ -3,6 +3,8 @@ package com.via.example;
 import com.via.rpc.server.RpcServiceServer;
 import com.via.rpc.conf.Config;
 
+import java.util.Scanner;
+
 /**
  * Created by liuj-ai on 2019/1/22.
  */
@@ -33,5 +35,17 @@ public class ServerTest {
         RpcServiceServer rpcServiceServer = new RpcServiceServer(config);
         rpcServiceServer.getIpcRegistry().registerService(new TestServiceImpl(TestService.class));
         rpcServiceServer.start();
+        System.out.println("<RPC服务已经启动>...");
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String text = scanner.next();
+            if (text.equals("stop")) {
+                break;
+            }
+        }
+        scanner.close();
+        System.out.println("<正在关闭RPC服务>...");
+        rpcServiceServer.stop();
+        System.out.println("<RPC服务已经关闭>...");
     }
 }
