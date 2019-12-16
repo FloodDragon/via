@@ -22,7 +22,7 @@
         <fastjson_version>1.2.46</fastjson_version>
         <javassist_version>3.20.0-GA</javassist_version>
         <commons_lang3_version>3.4</commons_lang3_version>
-        <netty4_version>4.1.25.Final</netty4_version>
+        <netty4_version>4.1.42.Final</netty4_version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <junit_jupiter_version>5.4.0</junit_jupiter_version>
         <hazelcast_version>3.11.1</hazelcast_version>
